@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+		<script src="https://unpkg.com/d3-sankey@0.7.1"></script>
+		<style>
+			body {
+				font-family: 'Roboto', sans-serif;
+			}
+			.s-p__tooltip {
+				display: flex;
+			  	position: fixed;
+			  	flex-direction: column;
+			  	width: 260px;
+			  	background-color: rgba(238, 238, 238, 0.8);
+			  	padding: 10px;
+			  	border-radius: 8px;
+			  	font-size: 17px;
+			 	z-index: 100;
+			 	box-shadow: 8px 13px 21px -10px rgba(177,179,178,0.65);
+			}
+
+			.s-p__tooltip-header{
+				background-color: rgba(156, 39, 176, 0.8);
+				color: white;
+				margin: -10px;
+				border-top-left-radius: 8px;
+				border-top-right-radius: 8px;
+				padding: 10px 10px;
+				margin-bottom: 10px;
+			}
+
+			.s-p__tooltip-header h1 {
+			  	font-size: 18px;
+			  	font-weight: 500;
+			  	margin: 5px;
+			}
+
+			.s-p__tooltip-body p {
+			  	margin: 5px;
+			  	font-size: 15px;
+			}
+
+			.sp-data {
+				font-weight: 500;
+			}
+
+		</style>
+	</head>
+	<body>
+		<template id="p-tooltip">
+			<div class="s-p__tooltip">
+				<div class="s-p__tooltip-header">
+					<h1></h1>
+				</div>
+				<div class="s-p__tooltip-body">
+					<p>Percentage of Source : <span class="s-p__value-source sp-data"></span></p>
+					<p>Percentage of Total : <span class="s-p__value-total sp-data"></span></p>
+				</div>
+			</div>
+		</template>
+		<template id="r-tooltip">
+			<div class="s-p__tooltip">
+				<div class="s-p__tooltip-header">
+					<h1></h1>
+				</div>
+				<div class="s-p__tooltip-body">
+					<p>Percentage of Total : <span class="s-p__value sp-data"></span></p>
+				</div>
+			</div>
+		</template>
+		<svg width="1300" height="800"></svg>
+		<script type="text/javascript" src="./tooltip.js"></script>
+		<script type="text/javascript" src="./sankey.js"></script>
+		<script type="text/javascript" src="./test.js"></script>
+	</body>
+</html>
