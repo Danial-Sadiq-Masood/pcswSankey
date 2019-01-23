@@ -141,7 +141,7 @@ function SankeyChart({
 	function fadeOutRects(selection){
 		selection.transition()
 			.duration(100)
-			.attr('opacity', 0.5);
+			.attr('opacity', 0.35);
 	}
 
 	function fadeInRects(selection){
@@ -153,7 +153,7 @@ function SankeyChart({
 	function fadeOutPaths(selection){
 		selection.transition()
 			.duration(100)
-			.attr('stroke-opacity', 0.2);
+			.attr('stroke-opacity', 0.1);
 	}
 
 	function fadeInPaths(selection){
