@@ -8,7 +8,8 @@ d3.csv('data.csv').then((data)=>{
 
 	res = buildGraph(data, ['employment', 'empType','industry', 'barrier']);
 
-	var sankey = SankeyChart({
+	sankey = SankeyChart({
+		data : res,
 		nodeWidth : 15,
 		nodePadding: 10,
 		width : 1300,

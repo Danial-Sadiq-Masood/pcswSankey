@@ -1,9 +1,12 @@
 /*jshint esversion : 6*/
 function SankeyChart({
+		data,
 		nodeWidth,
 		nodePadding,
 		width,
 		height,
+		hPadding = 30,
+		wPadding = 30,
 		svgSelector,
 		pToolTipConfig,
 		rToolTipConfig
@@ -17,7 +20,7 @@ function SankeyChart({
 		var sankey = d3.sankey()
 	      	.nodeWidth(nodeWidth)
 	      	.nodePadding(nodePadding)
-	      	.extent([[1, 1], [width - 1, height - 5]]);
+	      	.extent([[wPadding, hPadding], [width - wPadding, height - hPadding]]);
 
     var color = (function(){
 		  const color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -27,9 +30,11 @@ function SankeyChart({
 		const svg = d3.select(svgSelector);
       /*.style("width", "100%")
       .style("height", "auto");*/
-    const {nodes, links} = sankey(res);
+    console.log(data);
+    const {nodes, links} = sankey(data);
 
     const rects = svg.append("g")
+    	.style('opacity', 0)
 	    .selectAll("rect")
 	    .data(nodes)
 	    .enter().append("rect")
@@ -43,6 +48,7 @@ function SankeyChart({
       .text(d => `${d.name}\n${d.value}`);*/
 
 	  const link = svg.append("g")
+	  	  .style('opacity', 0)
 	      .attr("fill", "none")
 	      .attr("stroke-opacity", 0.5)
 	    .selectAll("g")
@@ -127,6 +133,7 @@ function SankeyChart({
 		});
 
 	  svg.append("g")
+	  	  .style('opacity', 0)
 	      .style("font-size", "15px")
 	    .selectAll("text")
 	    .data(nodes)
@@ -136,34 +143,40 @@ function SankeyChart({
 	      .attr("dy", "0.35em")
 	      .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
 	      .text(d => d.name);
+
+	  d3.selectAll(svgSelector + ' > g')
+			.transition()
+			.duration(400)
+			.style('opacity',1)
+			.delay((d,i)=>i * (20));
 	}
 
 	function fadeOutRects(selection){
-		selection.transition()
+		return selection.transition()
 			.duration(100)
 			.attr('opacity', 0.35);
 	}
 
 	function fadeInRects(selection){
-		selection.transition()
+		return selection.transition()
 			.duration(100)
 			.attr('opacity', 1);
 	}
 
 	function fadeOutPaths(selection){
-		selection.transition()
+		return selection.transition()
 			.duration(100)
 			.attr('stroke-opacity', 0.1);
 	}
 
 	function fadeInPaths(selection){
-		selection.transition()
+		return selection.transition()
 			.duration(100)
 			.attr('stroke-opacity', 0.5);
 	}
 
 	function highlightPath(selection){
-		selection.transition()
+		return selection.transition()
 			.duration(100)
 			.attr('stroke-opacity', 0.7);
 	}
@@ -185,7 +198,45 @@ function SankeyChart({
 		return {links : links, connectedRects : connectedRects};
 	}
 
+	function destroy(){
+		var transition = d3.selectAll(svgSelector + ' > g')
+			.transition()
+			.duration(200)
+			.style('opacity',0)
+			.delay((d,i)=>i * (20))
+			.remove();
+
+		return waitForTransitions(transition);
+	}
+
+	async function update(newGraph){
+		await destroy();
+		data = newGraph;
+		create();
+	}
+
+	function waitForTransitions(t){
+
+		var count = 0;
+
+		t.on('start.sequence', function(){
+			count++;
+		});
+		
+		return new Promise(function(resolve){
+			t.on('end.sequence', function(){
+				--count;
+				if(count === 0){
+					resolve(t);
+				}	
+			});
+		});
+	}
+
+
 	return {
-		create : create
+		create : create,
+		destroy : destroy,
+		update : update
 	};
 }
