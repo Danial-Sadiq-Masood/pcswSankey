@@ -2,6 +2,7 @@
 d3.csv('data.csv').then((data)=>{
 
 	data = data.filter((d)=>d.employment === 'employed');
+	tData = data;
 
 	totalWeight = data.reduce((a,d)=>a + parseFloat(d.weight),0);
 
