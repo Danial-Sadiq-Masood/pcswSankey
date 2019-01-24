@@ -45,6 +45,9 @@ function Tooltip({
 	}
 
 	function getToolTipPosition(event, tooltip){
+
+		tooltip = tooltip.children[0];
+		
 		var x = event.clientX,
 			y = event.clientY,
 			windowWidth = window.innerWidth,
