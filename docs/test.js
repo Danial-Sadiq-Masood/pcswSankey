@@ -25,6 +25,9 @@ d3.csv('data.csv').then((data)=>{
 				},
 				'.s-p__value-source' : function(d){
 					return ((d.value / d.source.value) * 100).toFixed(2) + '%'; 
+				},
+				'.s-p__value-target' : function(d){
+					return ((d.value / d.target.value) * 100).toFixed(2) + '%'; 
 				}, 
 				'.s-p__value-total' : function(d){
 					return ((parseFloat(d.value) / totalWeight) * 100).toFixed(2) + '%'; 

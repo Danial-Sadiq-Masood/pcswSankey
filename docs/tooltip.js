@@ -5,7 +5,9 @@ function Tooltip({
 	templateSelector,
 	selectorDataMap,
 	stylingFunc = function(){},
-	opacity
+	opacity,
+	defaultWidth = 300,
+	defaultHeight = 200
 } = {}){
 	
 
@@ -17,13 +19,9 @@ function Tooltip({
 
 			tTooltip = tooltip;
 
-			let finalPos = getToolTipPosition(event, tooltip.node());
-
 			tooltip
 					.attr('id',idPrefix + d[dataId])
 					.style('position', 'fixed')
-					.style('left', finalPos[0] + 'px')
-					.style('top', finalPos[1] + 'px')
 					.style('opacity', 0);
 
 			stylingFunc(tooltip,d);
@@ -32,7 +30,12 @@ function Tooltip({
 				return tooltip.node();
 			});
 
-			tooltip.transition()
+			let finalPos = getToolTipPosition(event, tooltip.node());
+
+			tooltip
+					.style('left', finalPos[0] + 'px')
+					.style('top', finalPos[1] + 'px')
+					.transition()
 					.duration(300)
 					.style('opacity', 1);
 
@@ -47,7 +50,7 @@ function Tooltip({
 	function getToolTipPosition(event, tooltip){
 
 		tooltip = tooltip.children[0];
-		
+
 		var x = event.clientX,
 			y = event.clientY,
 			windowWidth = window.innerWidth,
@@ -55,6 +58,14 @@ function Tooltip({
 			elemWidth = tooltip.offsetWidth,
 			elemHeight = tooltip.offsetHeight,
 			offset = 20;
+
+		if(!elemHeight || !elemWidth){
+			var style = window.getComputedStyle(tooltip);
+			elemWidth = style.width;
+			elemHeight = style.height;
+			console.log(elemWidth, elemWidth);
+			console.log('Not defined');
+		}
 
 		var finalX, finalY;
 
